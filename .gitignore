@@ -1,0 +1,8 @@
+*.class
+*/bin/*
+.metadata
+bin/*
+target/*
+/target/
+*.log
+*.lck
