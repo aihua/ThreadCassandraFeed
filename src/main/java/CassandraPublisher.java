@@ -1,4 +1,5 @@
 import java.time.Instant;
+import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
@@ -37,15 +38,20 @@ public class CassandraPublisher implements Runnable {
 				OrderBook ob = queue.take();
 				PreparedStatement ps = session.prepare(
 						"INSERT INTO tick "+
-						"(currencyPair, MarketTime, OrderBookBuilderStartTime, OrderBookBuilderEndTime, sequenceNumber, BidPrice2, BidSize2, BidPrice1, BidSize1, BidPrice0, BidSize0, AskPrice0, AskSize0, AskPrice1, AskSize1, AskPrice2, AskSize2) " +
-						"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+						"(currencyPair, MarketTime, OrderBookBuilderStartTime, "
+						+ "OrderBookBuilderEndTime, CassandraCaptureTime, sequenceNumber, "
+						+ "BidPrice2, BidSize2, BidPrice1, "
+						+ "BidSize1, BidPrice0, BidSize0, "
+						+ "AskPrice0, AskSize0, AskPrice1, "
+						+ "AskSize1, AskPrice2, AskSize2) " +
+						"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 				BoundStatement bs = new BoundStatement(ps);
 				session.execute(bs.bind(
 						ob.currencyPair, 
-						ob.MarketTime,
-						ob.OrderBookBuilderStartTime,
-						ob.OrderBookBuilderEndTime,
-						Instant.now(),
+						dateFromInstant(ob.MarketTime),
+						dateFromInstant(ob.OrderBookBuilderStartTime),
+						dateFromInstant(ob.OrderBookBuilderEndTime),
+						dateFromInstant(Instant.now()),
 						ob.sequenceNumber,
 						ob.BidPrice2,
 						ob.BidSize2,
@@ -65,6 +71,11 @@ public class CassandraPublisher implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public Date dateFromInstant(Instant i) {
+		Date d = Date.from(i);
+		return d;
 	}
 	
 }

@@ -5,6 +5,7 @@ CREATE TABLE tick (
 	MarketTime timestamp,
 	OrderBookBuilderStartTime timestamp,
 	OrderBookBuilderEndTime timestamp,
+	CassandraCaptureTime timestamp,
 	sequenceNumber int,
 	BidPrice2 double,
 	BidSize2 double,
