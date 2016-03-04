@@ -1,3 +1,5 @@
+package thread;
+
 import java.time.Instant;
 import java.util.Date;
 import java.util.concurrent.LinkedBlockingQueue;
