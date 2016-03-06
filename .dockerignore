@@ -1,0 +1,8 @@
+.metadata
+*.log
+*.lck
+src/*
+pom.xml
+makefile
+*.tar
+*.gz
